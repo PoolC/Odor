@@ -12,15 +12,26 @@ from wsgiref.handlers import format_date_time
 from tornado.web import RequestHandler
 
 from odor_exception.odorexception import OdorException, internal_server_error
+from odor_helper.session import Session
 
 class BaseHandler(RequestHandler):
     
+    @property
+    def session(self):
+        sessionid = self.get_secure_cookie('sid')
+        return Session(self.application.session_store, sessionid)
+    
     def get(self, raw_path=""):
         self._odor_process_request(self.render_get, "GET", raw_path)
-            
     
     def post(self, raw_path=""):
         self._odor_process_request(self.render_post, "POST", raw_path)
+    
+    def render_get(self, path):
+        raise NotImplementedError()
+    
+    def render_post(self, path):
+        raise NotImplementedError()
     
     def _odor_process_request(self, function, method, raw_path):
         path = raw_path.split("/")
@@ -64,9 +75,3 @@ class BaseHandler(RequestHandler):
             stack_trace,
             ]
         return error_log_data
-    
-    def render_get(self, path):
-        raise NotImplementedError()
-    
-    def render_post(self, path):
-        raise NotImplementedError()
