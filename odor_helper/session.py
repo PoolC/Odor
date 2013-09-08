@@ -9,6 +9,7 @@ from uuid import uuid4
 import time
 
 from config import SESSION_EXPIRATION_TIME
+from odor_helper.redishelper import RedisHelper
  
  
 class RedisSessionStore:
@@ -43,9 +44,11 @@ class RedisSessionStore:
  
  
 class Session:
- 
-    def __init__(self, session_store, sessionid=None):
-        self._store = session_store
+    
+    _session_store = RedisSessionStore(RedisHelper.connection)
+    
+    def __init__(self, sessionid=None):
+        self._store = Session._session_store
         self._sessionid = sessionid if sessionid else self._store.generate_sid()
         self._sessiondata = self._store.get_session(self._sessionid, 'data')
         self.dirty = False
