@@ -5,6 +5,7 @@ Created on 2013. 9. 7.
 @author: tintypemolly
 '''
 from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 from config import (
     DEBUG,
     MYSQL_DATABSE,
@@ -25,12 +26,17 @@ class SqlAlchemyHelper(object):
         MYSQL_DATABSE,
         "?charset=utf-8",
         ]
-    _connection_string = "".join(_connection_data)
-    print _connection_string
-    engine = create_engine(_connection_string, echo=DEBUG)
+    connection_string = "".join(_connection_data)
+    engine = create_engine(connection_string, echo=DEBUG)
+    _Session = sessionmaker(bind=engine)
     
-    def __init__(self):
-        pass
+    @classmethod
+    def engine(cls):
+        return cls.engine
+    
+    @classmethod
+    def session(cls):
+        return cls._Session()
 
 if __name__ == "__main__":
     import code
