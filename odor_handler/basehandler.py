@@ -13,6 +13,7 @@ from tornado.web import RequestHandler
 
 from odor_exception.odorexception import OdorException, internal_server_error
 from odor_helper.session import Session
+from odor_model.user import User
 
 class BaseHandler(RequestHandler):
     
@@ -75,3 +76,31 @@ class BaseHandler(RequestHandler):
             stack_trace,
             ]
         return error_log_data
+    
+    def get_login_user(self, dbsession):
+        if "user" not in self.session:
+            return None
+        else:
+            query = dbsession.query(User).filter(User.uid == self.session["user"])
+            result= query.all()
+            user = result[0]
+            return user
+    
+    def set_login_user_by_user_object(self, user):
+        self.session["user"] = user.uid
+    
+    def set_login_user_by_credential(self, dbsession, username, password):
+        query = dbsession.query(User).filter(User.username == username)
+        result = query.all()
+        if not result:
+            return False
+        else:
+            user = result[0]
+            if user.compare_password(password):
+                self.set_login_user_by_user_object(user)
+                return True
+            else:
+                return False
+    
+    def set_logout_user(self):
+        del(self.session["user"])
