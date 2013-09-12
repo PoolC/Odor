@@ -19,8 +19,10 @@ class BaseHandler(RequestHandler):
     
     @property
     def session(self):
-        sessionid = self.get_secure_cookie('sid')
-        return Session(sessionid)
+        sessionid = self.get_secure_cookie("sid")
+        session = Session(sessionid)
+        self.set_secure_cookie("sid", session._sessionid)
+        return session
     
     def get(self, raw_path=""):
         self._odor_process_request(self.render_get, "GET", raw_path)
