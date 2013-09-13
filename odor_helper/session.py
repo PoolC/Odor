@@ -59,10 +59,10 @@ class Session:
     def access(self, remote_ip):
         access_info = {'remote_ip':remote_ip, 'time':'%.6f' % time.time()}
         self._store.set_session(
-                self._sessionid,
-                'last_access',
-                pickle.dumps(access_info)
-                )
+            self._sessionid,
+            'last_access',
+            pickle.dumps(access_info)
+            )
  
     def last_access(self):
         access_info = self._store.get_session(self._sessionid, 'last_access')

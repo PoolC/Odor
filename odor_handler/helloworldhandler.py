@@ -9,4 +9,3 @@ from odor_handler.basehandler import BaseHandler
 class HelloWorldHandler(BaseHandler):
     def render_get(self, path):
         self.write("Hello, World!")
-        raise Exception
