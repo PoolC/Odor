@@ -1,3 +1,4 @@
+#-*- coding: utf-8 -*-
 from odor_helper.security.md5_hasher import MD5Hasher
 from odor_helper.security.pbkdf2_hasher import PBKDF2Hasher
 
