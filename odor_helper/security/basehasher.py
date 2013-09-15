@@ -6,9 +6,9 @@ Created on 2013. 9. 13.
 class BaseHasher(object):
     
     @staticmethod
-    def generate_password_data(clear_password):
+    def derive_password_data(clear_password):
         raise NotImplementedError()
     
     @staticmethod
-    def compare_password(password_data, clear_password):
+    def compare_password(derived_password_data, clear_password):
         raise NotImplementedError()
