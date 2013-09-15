@@ -122,10 +122,10 @@ class OdorAuthorizationProvider(AuthorizationProvider):
     
     #endregion
 
-class OdorResourceProvider(ResourceProvider):
+class OdorResourceAuthorization(ResourceAuthorization):
     user_id = None
 
-class OdorResourceAuthorization(ResourceAuthorization):
+class OdorResourceProvider(ResourceProvider):
     
     def __init__(self, request_handler):
         self._request_handler = request_handler

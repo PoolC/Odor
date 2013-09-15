@@ -12,6 +12,7 @@ from wsgiref.handlers import format_date_time
 from tornado.web import RequestHandler
 
 from odor_exception.odorexception import OdorException, internal_server_error
+from odor_helper.oauth import OdorResourceProvider
 from odor_helper.session import Session
 from odor_model.user import User
 
@@ -23,6 +24,10 @@ class BaseHandler(RequestHandler):
         session = Session(sessionid)
         self.set_secure_cookie("sid", session._sessionid)
         return session
+    
+    @property
+    def authorization(self):
+        return OdorResourceProvider(self).get_authorization()
     
     def get(self, raw_path=""):
         self._odor_process_request(self.render_get, "GET", raw_path)
