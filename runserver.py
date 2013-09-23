@@ -12,6 +12,8 @@ from config import COOKIE_SECRET
 
 application_settings = {
     "cookie_secret": COOKIE_SECRET,
+    "xsrf_cookies": True,
+    "template_path": "template"
     }
 
 application = Application(urlpatterns, **application_settings)
