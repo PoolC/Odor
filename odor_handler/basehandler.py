@@ -14,6 +14,7 @@ from tornado.web import RequestHandler
 from odor_exception.odorexception import OdorException, internal_server_error
 from odor_helper.oauth import OdorResourceProvider
 from odor_helper.session import Session
+from odor_helper.sqlalchemyhelper import SqlAlchemyHelper
 from odor_model.user import User
 
 class BaseHandler(RequestHandler):
@@ -28,6 +29,13 @@ class BaseHandler(RequestHandler):
     @property
     def authorization(self):
         return OdorResourceProvider(self).get_authorization()
+    
+    def prepare(self):
+        RequestHandler.prepare(self)
+        self.dbsession = SqlAlchemyHelper.session()
+    
+    def on_finish(self):
+        self.dbsession.close()
     
     def get(self, raw_path=""):
         self._odor_process_request(self.render_get, "GET", raw_path)
@@ -84,11 +92,11 @@ class BaseHandler(RequestHandler):
             ]
         return error_log_data
     
-    def get_login_user(self, dbsession):
+    def get_login_user(self):
         if "user" not in self.session:
             return None
         else:
-            query = dbsession.query(User).filter(User.uid == self.session["user"])
+            query = self.dbsession.query(User).filter(User.uid == self.session["user"])
             result= query.all()
             user = result[0]
             return user
@@ -96,8 +104,8 @@ class BaseHandler(RequestHandler):
     def set_login_user_by_user_object(self, user):
         self.session["user"] = user.uid
     
-    def set_login_user_by_credential(self, dbsession, username, password):
-        query = dbsession.query(User).filter(User.username == username)
+    def set_login_user_by_credential(self, username, password):
+        query = self.dbsession.query(User).filter(User.username == username)
         result = query.all()
         if not result:
             return False
@@ -111,3 +119,12 @@ class BaseHandler(RequestHandler):
     
     def set_logout_user(self):
         del(self.session["user"])
+    
+    def get_authorization_user(self):
+        if not self.authorization.is_valid:
+            return None
+        else:
+            query = self.dbsession.query(User).filter(User.uid == self.authorization.user_id)
+            result = query.all()
+            user = result[0]
+            return user

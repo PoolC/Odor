@@ -10,7 +10,6 @@ from pyoauth2.provider import AuthorizationProvider, ResourceProvider, ResourceA
 
 from config import ACCESS_TOKEN_EXPIRATION_TIME
 from odor_helper.redishelper import RedisHelper
-from odor_helper.sqlalchemyhelper import SqlAlchemyHelper
 from odor_model.application import Application
 
 def authorization_code_redis_name(code):
@@ -34,7 +33,7 @@ class OdorAuthorizationProvider(AuthorizationProvider):
         return ACCESS_TOKEN_EXPIRATION_TIME
     
     def validate_client_id(self, client_id):
-        dbsession = SqlAlchemyHelper.session()
+        dbsession = self._request_handler.dbsession
         query = dbsession.query(Application).filter(Application.uid == client_id)
         result = query.all()
         if result:
@@ -45,7 +44,7 @@ class OdorAuthorizationProvider(AuthorizationProvider):
             return False
 
     def validate_client_secret(self, client_id, client_secret):
-        dbsession = SqlAlchemyHelper.session()
+        dbsession = self._request_handler.dbsession
         query = dbsession.query(Application).filter(Application.uid == client_id)
         result = query.all()
         if not result:
@@ -58,7 +57,7 @@ class OdorAuthorizationProvider(AuthorizationProvider):
             return app_secret == client_secret
 
     def validate_redirect_uri(self, client_id, redirect_uri):
-        dbsession = SqlAlchemyHelper.session()
+        dbsession = self._request_handler.dbsession
         query = dbsession.query(Application).filter(Application.uid == client_id)
         result = query.all()
         if not result:
@@ -74,7 +73,7 @@ class OdorAuthorizationProvider(AuthorizationProvider):
         return True
 
     def validate_access(self):
-        dbsession = SqlAlchemyHelper.session()
+        dbsession = self._request_handler.dbsession
         user = self._request_handler.get_login_user(dbsession)
         validity = True if user else False
         dbsession.close()
@@ -91,7 +90,7 @@ class OdorAuthorizationProvider(AuthorizationProvider):
         return json.loads(raw_data) if raw_data else None
 
     def persist_authorization_code(self, client_id, code, scope):
-        dbsession = SqlAlchemyHelper.session()
+        dbsession = self._request_handler.dbsession
         data = {
             "client_id": client_id,
             "code": code,

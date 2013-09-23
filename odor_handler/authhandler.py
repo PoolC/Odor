@@ -6,7 +6,6 @@ Created on 2013. 9. 16.
 '''
 from odor_handler.basehandler import BaseHandler
 from odor_helper.oauth import OdorAuthorizationProvider
-from odor_helper.sqlalchemyhelper import SqlAlchemyHelper
 
 class AuthHandler(BaseHandler):
     
@@ -21,9 +20,6 @@ class AuthHandler(BaseHandler):
             self.authorization_process()
     
     def render_login_page(self):
-        pass
-    
-    def authorization_process(self):
         """
         path : auth/authorize
             description :
@@ -50,11 +46,11 @@ class AuthHandler(BaseHandler):
                 full:
                     https://www.bar.com/oauth/callback?code=635a8e8ec74f586be353eae3ff400676&state=4f2912363b0b45bcf8acb4090b73a192
         """
-        dbsession = SqlAlchemyHelper.session()
-        login_user = self.get_login_user(dbsession)
-        if login_user:
+    
+    def authorization_process(self):
+        username = self.get_argument("username")
+        password = self.get_argument("password")
+        if self.set_login_user_by_credential(username, password):
             response = OdorAuthorizationProvider(self).get_authorization_code_from_uri(self, self.request.uri)
             self.wrtie(response.text)
             self.set_status(response.status_code)
-        else:
-            self.render("login.html")
