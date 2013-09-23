@@ -1,0 +1,38 @@
+#content {
+	width: 640px;
+	margin: 0 auto;
+}
+
+#content div {
+	margin: 0 auto;
+}
+
+#banner {
+	background-image: url('/static/image/PoolC3_small.png');
+	width: 400px;
+	height: 300px;
+}
+
+#login_form_wrapper input:not([type='submit']) {
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+	font-size: 20pt;
+	border-radius: 5px;
+}
+
+#username {
+	margin-top: 30px;
+}
+
+#password {
+	margin-top: 15px;
+}
+
+#login_button {
+	width: 60px;
+	height: 40px;
+	background-color: #9f9;
+	margin-left: 415px;
+	margin-top: 30px;
+}

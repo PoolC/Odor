@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block header %}
+<link rel="stylesheet" href="/static/css/login.css" />
+{% end %}
+{% block body %}
+<div id="content">
+	<div id="banner">
+	</div>
+	<div id="login_form_wrapper">
+		<form action="/auth/authorize">
+			<input type="text" name="username" id="username" placeholder="ID" />
+			<input type="password" name="password" id="password" placeholder="Password" />
+			<input type="submit" id="login_button" value="Login" />
+		</form>
+	</div>
+</div>
+{% end %}
