@@ -46,15 +46,18 @@ class AuthHandler(BaseHandler):
                 full:
                     https://www.bar.com/oauth/callback?code=635a8e8ec74f586be353eae3ff400676&state=4f2912363b0b45bcf8acb4090b73a192
         """
-        '''
         client_id = self.get_argument("client_id")
         redirect_uri = self.get_argument("redirect_uri")
         response_type = self.get_argument("response_type")
         state = self.get_argument("state", None)
         display = self.get_argument("display", "default")
-        '''
         data = {
             "title": "PoolC Login",
+            "client_id": client_id,
+            "redirect_uri": redirect_uri,
+            "response_type": response_type,
+            "display": display,
+            "state": state,
             }
         self.render("login.html", **data)
     
