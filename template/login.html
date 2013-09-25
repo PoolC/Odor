@@ -4,13 +4,19 @@
 {% end %}
 {% block body %}
 <div id="content">
-	<div id="banner">
+	<div id="banner" class="center">
 	</div>
-	<div id="login_form_wrapper">
-		<form action="/auth/authorize">
-			<input type="text" name="username" id="username" placeholder="ID" />
-			<input type="password" name="password" id="password" placeholder="Password" />
-			<input type="submit" id="login_button" value="Login" />
+	<div id="login_form_wrapper" class="center">
+		<form id="login_form" method="post" action="/auth/authorize">
+			<div class="input_label">Username<br /></div>
+			<input type="text" name="username" id="username" class="text_input" />
+			<div class="input_label">Password<br /></div>
+			<input type="password" name="password" id="password" class="text_input" />
+			<div id="lowest_line" class="center">
+				<input type="checkbox" id="remember me" />
+				<div id="remember_me_label">remember me</div>
+				<input type="submit" id="login_button" value="Login" />
+			</div>
 		</form>
 	</div>
 </div>

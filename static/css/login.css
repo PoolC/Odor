@@ -3,8 +3,9 @@
 	margin: 0 auto;
 }
 
-#content div {
-	margin: 0 auto;
+#content .center {
+	margin-left: auto;
+	margin-right: auto;
 }
 
 #banner {
@@ -13,26 +14,68 @@
 	height: 300px;
 }
 
-#login_form_wrapper input:not([type='submit']) {
+#login_form_wrapper {
+	font-family: "Arial";
+	margin-top: 40px;
+	padding-top: 20px;
+	width: 500px;
+	border: 1px solid #999;
+	border-radius: 10px;
+	box-shadow: 10px 10px 5px #888;
+}
+
+#login_form .input_label {
+	font-weight: bold;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 30px;
+	margin-bottom: 5px;
+	width: 310px;
+	padding-left: 10px;
+	color: #999;
+}
+
+#login_form .text_input {
 	margin-left: auto;
 	margin-right: auto;
 	display: block;
-	font-size: 20pt;
-	border-radius: 5px;
+	font-size: 12pt;
+	height: 40px;
+	width: 310px;
+	padding-left: 10px;
+	border: 1px solid #999;
+	border-radius: 3px;
 }
 
-#username {
-	margin-top: 30px;
+#lowest_line {
+	position: relative;
+	width: 320px;
+	margin-top: 50px;
+	margin-bottom: 50px;
 }
 
-#password {
-	margin-top: 15px;
+#remember_me {
+	display: inline-block;
+}
+
+#remember_me_label {
+	display: inline-block;
 }
 
 #login_button {
+	position: absolute;
+	top: -10px;
+	right: 0px;
+	display: inline-block;
+	border: 1px solid #99EE6B;
+	border-radius: 5px;
 	width: 60px;
 	height: 40px;
-	background-color: #9f9;
-	margin-left: 415px;
-	margin-top: 30px;
+	background-color: #7AEE3C;
 }
+
+#login_button:active {
+	border-color: #329000; 
+	background-color: #55A62A;
+}
+
