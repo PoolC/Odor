@@ -37,10 +37,8 @@ class OdorAuthorizationProvider(AuthorizationProvider):
         query = dbsession.query(Application).filter(Application.uid == client_id)
         result = query.all()
         if result:
-            dbsession.close()
             return True
         else:
-            dbsession.close()
             return False
 
     def validate_client_secret(self, client_id, client_secret):
@@ -48,12 +46,10 @@ class OdorAuthorizationProvider(AuthorizationProvider):
         query = dbsession.query(Application).filter(Application.uid == client_id)
         result = query.all()
         if not result:
-            dbsession.close()
             return False
         if result:
             application = result[0]
             app_secret = application.app_secret
-            dbsession.close()
             return app_secret == client_secret
 
     def validate_redirect_uri(self, client_id, redirect_uri):
@@ -61,12 +57,10 @@ class OdorAuthorizationProvider(AuthorizationProvider):
         query = dbsession.query(Application).filter(Application.uid == client_id)
         result = query.all()
         if not result:
-            dbsession.close()
             return False
         if result:
             application = result[0]
             app_redirect_uri = application.app_redirect_uri
-            dbsession.close()
             return app_redirect_uri == redirect_uri
 
     def validate_scope(self, client_id, scope):
@@ -76,7 +70,6 @@ class OdorAuthorizationProvider(AuthorizationProvider):
         dbsession = self._request_handler.dbsession
         user = self._request_handler.get_login_user(dbsession)
         validity = True if user else False
-        dbsession.close()
         return validity
 
     def from_authorization_code(self, client_id, code, scope):
@@ -97,7 +90,6 @@ class OdorAuthorizationProvider(AuthorizationProvider):
             "scope": scope,
             "user_id": self._request_handler.get_login_user(dbsession).uid,
             }
-        dbsession.close()
         name = authorization_code_redis_name(code)
         RedisHelper.connection.set(name, json.dumps(data))
 
@@ -143,7 +135,6 @@ class OdorResourceProvider(ResourceProvider):
         raw_data = RedisHelper.connection.get(name)
         data = json.loads(raw_data) if raw_data else None
         if data:
-            authorization = OdorResourceProvider()
             authorization.is_valid = True
             authorization.token = access_token
             authorization.client_id = data.get("client_id")
